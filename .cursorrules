@@ -1,0 +1,70 @@
+# Cursor Project Rules
+
+## Goals
+
+- Enforce clean architecture and modular structure across the app
+- Promote reuse via singleton and shared components/hooks
+- Maintain production-grade quality and maintainability
+
+## Architecture
+
+- Use feature-first structure inside `features/` with colocated `components/`, `hooks/`, `services/`, `store/`
+- Shared UI lives in `components/ui/` only
+- Global providers live in `providers/` (e.g., `app-providers.tsx`)
+- All contexts in `contexts/`
+- Forms use `components/form/` and `form-management/`
+- API/HTTP clients live in `lib/` or `services/`
+
+## Code Writing Rules
+
+- TypeScript everywhere. Avoid `any`.
+- No magic strings. Extract to constants/enums.
+- Pure functions where possible. Side effects in hooks/services only.
+- Component props must be explicit and documented.
+- Favor composition over inheritance.
+- Keep files focused; split when exceeding ~300 LOC.
+
+## State & Data
+
+- React Query for server state. Zustand for simple client state.
+- Centralize QueryClient in `providers/app-providers.tsx` as a singleton.
+- Network calls via `lib/axios.ts` or feature service modules.
+
+## Forms
+
+- Use Zod + React Hook Form.
+- Prefer `BaseFormComponent` and `FormField` abstractions.
+
+## Testing & Lint
+
+- Fix lints before review.
+- Keep ESLint/TS strict; do not disable rules globally.
+
+## Git & PRs
+
+- Small, scoped PRs.
+- Include a short architecture note when adding new feature folders.
+
+## Docs
+
+- Update `docs/` when adding new features or changing architecture.
+
+## Naming
+
+- Files/components in kebab-case. Exports in PascalCase for components, camelCase for functions.
+- Avoid casing mismatches in imports.
+
+## Performance
+
+- Memoize expensive renders.
+- Use dynamic imports for heavy components when sensible.
+
+## Accessibility
+
+- Use semantic HTML and labels for forms.
+
+## Security
+
+- Validate inputs with Zod on client and server.
+
+# End of rules

@@ -1,4 +1,4 @@
-export type FieldType = 'input' | 'textarea' | 'select' | 'asyncSelect';
+export type FieldType = 'input' | 'textarea' | 'select' | 'asyncSelect' | 'password' | 'email';
 
 export interface FieldDefinition {
   name: string;
@@ -7,6 +7,8 @@ export interface FieldDefinition {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  required?: boolean;
+  description?: string;
   // AsyncSelect specific props
   apiUrl?: string;
   queryKey?: string;
