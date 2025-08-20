@@ -1,7 +1,11 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Menu, Moon, Sun, User, LogOut, Globe } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { useTheme } from 'next-themes'
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,16 +13,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useAuth } from '@/contexts/auth-context';
-import { useAppStore } from '@/store/app-store';
-import { Menu, Moon, Sun, User, LogOut } from 'lucide-react';
-import { useTheme } from 'next-themes';
+} from '@/components/ui/dropdown-menu'
+import { useAuth } from '@/contexts/auth-context'
+import { useLanguageSwitcher } from '@/hooks/use-language-switcher'
+import { useAppStore } from '@/store/app-store'
 
 export function Header() {
-  const { user, logout } = useAuth();
-  const { toggleSidebar } = useAppStore();
-  const { theme, setTheme } = useTheme();
+  const { user, logout } = useAuth()
+  const { toggleSidebar } = useAppStore()
+  const { theme, setTheme } = useTheme()
+  const t = useTranslations('common')
+  const { currentLocale, locales, switchLanguage } = useLanguageSwitcher()
 
   return (
     <header className="h-16 border-b bg-background px-6 flex items-center justify-between">
@@ -31,10 +36,37 @@ export function Header() {
         >
           <Menu className="h-4 w-4" />
         </Button>
-        <h1 className="text-xl font-semibold">Dashboard</h1>
+        <h1 className="text-xl font-semibold">{t('dashboard')}</h1>
       </div>
 
       <div className="flex items-center space-x-4">
+        {/* Language switcher */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm">
+              <Globe className="h-4 w-4 mr-1" />
+              {currentLocale.toUpperCase()}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {locales.map((locale) => (
+              <DropdownMenuItem
+                key={locale}
+                className={locale === currentLocale ? 'bg-accent' : ''}
+                onClick={() => {
+                  console.log(locale, '--->')
+                  if (locale === 'en') {
+                    switchLanguage('')
+                  }
+                  switchLanguage(locale)
+                }}
+              >
+                {t(`language.${locale}`)}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
         {/* Theme toggle */}
         <Button
           variant="ghost"
@@ -43,7 +75,7 @@ export function Header() {
         >
           <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">{t('theme.toggle')}</span>
         </Button>
 
         {/* User menu */}
@@ -70,16 +102,16 @@ export function Header() {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
+              <span>{t('profile')}</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>
               <LogOut className="mr-2 h-4 w-4" />
-              <span>Log out</span>
+              <span>{t('logout')}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
     </header>
-  );
+  )
 }

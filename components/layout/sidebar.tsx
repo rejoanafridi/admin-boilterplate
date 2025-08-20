@@ -1,43 +1,42 @@
-'use client';
+'use client'
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { useAppStore } from '@/store/app-store';
-import { useAuth } from '@/contexts/auth-context';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Settings, 
-  LogOut,
-  Menu,
-  X
-} from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { LayoutDashboard, Users, Settings, LogOut, Menu, X } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
-const navigationItems = [
+import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { useAuth } from '@/contexts/auth-context'
+import { useLanguageSwitcher } from '@/hooks/use-language-switcher'
+import { cn } from '@/lib/utils'
+import { useAppStore } from '@/store/app-store'
+
+const getNavigationItems = (t: (key: string) => string) => [
   {
-    title: 'Dashboard',
+    title: t('dashboard'),
     href: '/dashboard',
     icon: LayoutDashboard,
   },
   {
-    title: 'Users',
+    title: t('users'),
     href: '/dashboard/users',
     icon: Users,
   },
   {
-    title: 'Settings',
+    title: t('settings'),
     href: '/dashboard/settings',
     icon: Settings,
   },
-];
+]
 
 export function Sidebar() {
-  const { sidebarOpen, toggleSidebar } = useAppStore();
-  const { logout } = useAuth();
-  const pathname = usePathname();
+  const { sidebarOpen, toggleSidebar } = useAppStore()
+  const { logout } = useAuth()
+  const pathname = usePathname()
+  const t = useTranslations('common')
+  const { getLocalizedPath } = useLanguageSwitcher()
+  const navigationItems = getNavigationItems(t)
 
   return (
     <>
@@ -59,7 +58,7 @@ export function Sidebar() {
         <div className="flex h-full flex-col">
           {/* Header */}
           <div className="flex h-16 items-center justify-between px-6 border-b">
-            <h2 className="text-lg font-semibold">Admin Panel</h2>
+            <h2 className="text-lg font-semibold">{t('adminPanel')}</h2>
             <Button
               variant="ghost"
               size="sm"
@@ -74,15 +73,21 @@ export function Sidebar() {
           <ScrollArea className="flex-1 px-3 py-4">
             <nav className="space-y-2">
               {navigationItems.map((item) => {
-                const isActive = pathname === item.href;
+                // Check if current path (with or without locale) matches this item
+                const pathnameWithoutLocale = pathname.replace(
+                  /^\/[^/]+(?=\/|$)/,
+                  ''
+                )
+                const isActive =
+                  pathnameWithoutLocale === item.href || pathname === item.href
                 return (
                   <Link
                     key={item.href}
-                    href={item.href}
+                    href={getLocalizedPath(item.href)}
                     onClick={() => {
                       // Close sidebar on mobile after navigation
                       if (window.innerWidth < 1024) {
-                        toggleSidebar();
+                        toggleSidebar()
                       }
                     }}
                   >
@@ -94,7 +99,7 @@ export function Sidebar() {
                       {item.title}
                     </Button>
                   </Link>
-                );
+                )
               })}
             </nav>
           </ScrollArea>
@@ -107,11 +112,11 @@ export function Sidebar() {
               onClick={logout}
             >
               <LogOut className="mr-2 h-4 w-4" />
-              Logout
+              {t('logout')}
             </Button>
           </div>
         </div>
       </div>
     </>
-  );
+  )
 }

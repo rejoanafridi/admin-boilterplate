@@ -1,0 +1,21 @@
+{
+  "common": {
+    "dashboard": "Dashboard",
+    "users": "Benutzer",
+    "settings": "Einstellungen",
+    "profile": "Profil",
+    "logout": "Abmelden",
+    "adminPanel": "Admin-Panel",
+    "theme": {
+      "toggle": "Theme umschalten"
+    },
+    "language": {
+      "en": "Englisch",
+      "de": "Deutsch"
+    }
+  },
+  "auth": {
+    "login": "Anmelden",
+    "register": "Registrieren"
+  }
+}
