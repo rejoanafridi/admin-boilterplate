@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { useAuth } from '@/contexts/auth-context'
 import { useToast } from '@/hooks/use-toast'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import BaseFormComponent from '@/components/form/form-management/BaseFormComponent'
 import { FieldDefinition } from '@/components/form/form-management/types'
 import { Card } from '@/components/ui/card'
@@ -34,6 +35,7 @@ const loginFields: FieldDefinition[] = [
 ]
 
 export default function LoginPage() {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const { login } = useAuth()
   const { toast } = useToast()
@@ -54,8 +56,12 @@ export default function LoginPage() {
       }
       const mockToken = 'mock-jwt-token'
 
+      // Login will store the token in cookies via auth store
       login(mockUser, mockToken)
       toast('Login successful!', { type: 'success' })
+
+      // Redirect to dashboard after successful login
+      router.push('/dashboard')
     } catch (error) {
       toast('Login failed. Please check your credentials.', { type: 'error' })
     } finally {
