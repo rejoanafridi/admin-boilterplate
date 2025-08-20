@@ -1,16 +1,27 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
-import { Button } from '@/components/ui/button';
-import { DataTable } from '@/components/data-table/data-table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { UserForm } from '@/features/users/components/user-form';
-import { createUserColumns } from '@/features/users/components/user-columns';
-import { userService, User, CreateUserRequest, UpdateUserRequest } from '@/services/user-service';
-import { useToast } from '@/hooks/use-toast';
-import { Plus } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { Plus } from 'lucide-react'
+import { useState } from 'react'
+
+import { DataTable } from '@/components/data-table/data-table'
+import { DashboardLayout } from '@/components/layout/dashboard-layout'
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { createUserColumns } from '@/features/users/components/user-columns'
+import { UserForm } from '@/features/users/components/user-form'
+import { useToast } from '@/hooks/use-toast'
+import {
+  userService,
+  User,
+  CreateUserRequest,
+  UpdateUserRequest,
+} from '@/services/user-service'
 
 // Mock data for development
 const mockUsers: User[] = [
@@ -41,31 +52,31 @@ const mockUsers: User[] = [
     createdAt: '2024-01-13T14:20:00Z',
     updatedAt: '2024-01-13T14:20:00Z',
   },
-];
+]
 
 export default function UsersPage() {
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-  
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [editingUser, setEditingUser] = useState<User | null>(null)
+
+  const queryClient = useQueryClient()
+  const { toast } = useToast()
 
   // Fetch users with mock data
   const { data: users = [], isLoading } = useQuery({
     queryKey: ['users'],
     queryFn: async () => {
       // Mock API call - replace with actual userService.getUsers()
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      return mockUsers;
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      return mockUsers
     },
-  });
+  })
 
   // Create user mutation
   const createUserMutation = useMutation({
     mutationFn: async (userData: CreateUserRequest) => {
       // Mock API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       const newUser: User = {
         id: Date.now().toString(),
         name: userData.name,
@@ -74,67 +85,73 @@ export default function UsersPage() {
         status: 'active',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-      };
-      return newUser;
+      }
+      return newUser
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-      setIsCreateDialogOpen(false);
-      toast('User created successfully!', { type: 'success' });
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+      setIsCreateDialogOpen(false)
+      toast('User created successfully!', { type: 'success' })
     },
     onError: () => {
-      toast('Failed to create user', { type: 'error' });
+      toast('Failed to create user', { type: 'error' })
     },
-  });
+  })
 
   // Update user mutation
   const updateUserMutation = useMutation({
-    mutationFn: async ({ id, userData }: { id: string; userData: UpdateUserRequest }) => {
+    mutationFn: async ({
+      id,
+      userData,
+    }: {
+      id: string
+      userData: UpdateUserRequest
+    }) => {
       // Mock API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      return { ...editingUser, ...userData } as User;
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      return { ...editingUser, ...userData } as User
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-      setIsEditDialogOpen(false);
-      setEditingUser(null);
-      toast('User updated successfully!', { type: 'success' });
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+      setIsEditDialogOpen(false)
+      setEditingUser(null)
+      toast('User updated successfully!', { type: 'success' })
     },
     onError: () => {
-      toast('Failed to update user', { type: 'error' });
+      toast('Failed to update user', { type: 'error' })
     },
-  });
+  })
 
   // Delete user mutation
   const deleteUserMutation = useMutation({
     mutationFn: async (id: string) => {
       // Mock API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000))
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-      toast('User deleted successfully!', { type: 'success' });
+      queryClient.invalidateQueries({ queryKey: ['users'] })
+      toast('User deleted successfully!', { type: 'success' })
     },
     onError: () => {
-      toast('Failed to delete user', { type: 'error' });
+      toast('Failed to delete user', { type: 'error' })
     },
-  });
+  })
 
   const handleEdit = (user: User) => {
-    setEditingUser(user);
-    setIsEditDialogOpen(true);
-  };
+    setEditingUser(user)
+    setIsEditDialogOpen(true)
+  }
 
   const handleDelete = async (user: User) => {
     if (confirm(`Are you sure you want to delete ${user.name}?`)) {
-      deleteUserMutation.mutate(user.id);
+      deleteUserMutation.mutate(user.id)
     }
-  };
+  }
 
   const columns = createUserColumns({
     onEdit: handleEdit,
     onDelete: handleDelete,
-  });
+  })
 
   if (isLoading) {
     return (
@@ -143,7 +160,7 @@ export default function UsersPage() {
           <div className="text-lg">Loading users...</div>
         </div>
       </DashboardLayout>
-    );
+    )
   }
 
   return (
@@ -176,7 +193,9 @@ export default function UsersPage() {
               <DialogTitle>Create New User</DialogTitle>
             </DialogHeader>
             <UserForm
-              onSubmit={(data) => createUserMutation.mutate(data as CreateUserRequest)}
+              onSubmit={(data) =>
+                createUserMutation.mutate(data as CreateUserRequest)
+              }
               isLoading={createUserMutation.isPending}
             />
           </DialogContent>
@@ -191,10 +210,12 @@ export default function UsersPage() {
             {editingUser && (
               <UserForm
                 initialData={editingUser}
-                onSubmit={(data) => updateUserMutation.mutate({
-                  id: editingUser.id,
-                  userData: data as UpdateUserRequest,
-                })}
+                onSubmit={(data) =>
+                  updateUserMutation.mutate({
+                    id: editingUser.id,
+                    userData: data as UpdateUserRequest,
+                  })
+                }
                 isLoading={updateUserMutation.isPending}
                 isEdit
               />
@@ -203,5 +224,5 @@ export default function UsersPage() {
         </Dialog>
       </div>
     </DashboardLayout>
-  );
+  )
 }

@@ -1,52 +1,50 @@
 'use client';
 
-import { Control, FieldPath, FieldValues } from 'react-hook-form';
-import { Checkbox } from '@/components/ui/checkbox';
-import { FormField } from './form-field';
+import { Control, FieldValues, Path } from 'react-hook-form'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form'
+import { Checkbox, CheckboxProps } from '@/components/ui/checkbox'
 
-interface CheckboxFieldProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
-> {
-  control: Control<TFieldValues>;
-  name: TName;
-  label?: string;
-  description?: string;
-  required?: boolean;
-  className?: string;
+interface CheckboxFieldProps<T extends FieldValues> extends CheckboxProps {
+  name: Path<T>
+  control: Control<T>
+  label: string
+  helperText?: string
 }
 
-export function CheckboxField<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
->(props: CheckboxFieldProps<TFieldValues, TName>) {
-  return (
-    <FormField
-      control={props.control}
-      name={props.name}
-      label={props.label}
-      description={props.description}
-      required={props.required}
-      className={props.className}
-    >
-      {({ value, onChange }) => (
-        <div className="flex items-center space-x-2">
+const CheckboxField = <T extends FieldValues>({
+  name,
+  control,
+  label,
+  helperText,
+  ...props
+}: CheckboxFieldProps<T>) => (
+  <FormField
+    control={control}
+    name={name}
+    render={({ field }) => (
+      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+        <FormControl>
           <Checkbox
-            checked={value || false}
-            onCheckedChange={onChange}
-            id={props.name}
+            checked={field.value}
+            onCheckedChange={field.onChange}
+            {...props}
           />
-          {props.label && (
-            <label
-              htmlFor={props.name}
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              {props.label}
-              {props.required && <span className="text-red-500 ml-1">*</span>}
-            </label>
+        </FormControl>
+        <div className="space-y-1 leading-none">
+          <FormLabel>{label}</FormLabel>
+          {helperText && (
+            <FormDescription>{helperText}</FormDescription>
           )}
         </div>
-      )}
-    </FormField>
-  );
-}
+      </FormItem>
+    )}
+  />
+)
+
+export default CheckboxField

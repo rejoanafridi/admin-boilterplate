@@ -1,13 +1,15 @@
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemo, useEffect, useState } from 'react'
-import { useForm, DefaultValues } from 'react-hook-form'
+import { useForm, DefaultValues, FormProvider } from 'react-hook-form'
 import { z } from 'zod'
+
 import FormField from './FormField'
 import { FieldDefinition } from './types'
-import { cn } from '@/lib/utils'
+
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { useToast } from '@/hooks/use-toast'
+import { cn } from '@/lib/utils'
 
 export interface FormState<T> {
   values: T
@@ -85,18 +87,19 @@ const BaseFormComponent = <T extends z.ZodType>({
   const loading = isLoading || internalLoading
   const { toast } = useToast()
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isDirty, isValid },
-    watch,
-    reset,
-  } = useForm<z.infer<T>>({
+  const formMethods = useForm<z.infer<T>>({
     resolver: zodResolver(schema),
     mode: 'onChange',
     defaultValues,
   })
+
+  const {
+    handleSubmit,
+    control,
+    formState: { isDirty, isValid },
+    watch,
+    reset,
+  } = formMethods
 
   // Watch all fields
   const watchAllFields = watch()
@@ -187,15 +190,13 @@ const BaseFormComponent = <T extends z.ZodType>({
         <div key={field.name} className={field.className || 'col-span-12'}>
           <FormField
             field={field}
-            register={register}
             control={control}
-            errors={errors}
             isLoading={loading}
             resetKey={resetKey}
           />
         </div>
       )),
-    [fields, register, control, errors, loading, resetKey]
+    [fields, control, loading, resetKey]
   )
 
   const formContent = (
@@ -233,11 +234,13 @@ const BaseFormComponent = <T extends z.ZodType>({
   )
 
   const content = (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <fieldset disabled={formProps?.disabled || loading}>
-        {formContent}
-      </fieldset>
-    </form>
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <fieldset disabled={formProps?.disabled || loading}>
+          {formContent}
+        </fieldset>
+      </form>
+    </FormProvider>
   )
 
   if (cardProps) {

@@ -1,8 +1,11 @@
-'use client';
+'use client'
 
-import { ColumnDef } from '@tanstack/react-table';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { ColumnDef } from '@tanstack/react-table'
+import { ArrowUpDown, MoreHorizontal, Edit, Trash2 } from 'lucide-react'
+
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,17 +13,18 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { ArrowUpDown, MoreHorizontal, Edit, Trash2 } from 'lucide-react';
-import { User } from '@/services/user-service';
-import { Checkbox } from '@/components/ui/checkbox';
+} from '@/components/ui/dropdown-menu'
+import { User } from '@/services/user-service'
 
 interface UserColumnsProps {
-  onEdit: (user: User) => void;
-  onDelete: (user: User) => void;
+  onEdit: (user: User) => void
+  onDelete: (user: User) => void
 }
 
-export const createUserColumns = ({ onEdit, onDelete }: UserColumnsProps): ColumnDef<User>[] => [
+export const createUserColumns = ({
+  onEdit,
+  onDelete,
+}: UserColumnsProps): ColumnDef<User>[] => [
   {
     id: 'select',
     header: ({ table }) => (
@@ -66,32 +70,30 @@ export const createUserColumns = ({ onEdit, onDelete }: UserColumnsProps): Colum
         <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
-    cell: ({ row }) => (
-      <div className="lowercase">{row.getValue('email')}</div>
-    ),
+    cell: ({ row }) => <div className="lowercase">{row.getValue('email')}</div>,
   },
   {
     accessorKey: 'role',
     header: 'Role',
     cell: ({ row }) => {
-      const role = row.getValue('role') as string;
+      const role = row.getValue('role') as string
       return (
         <Badge variant={role === 'admin' ? 'destructive' : 'secondary'}>
           {role}
         </Badge>
-      );
+      )
     },
   },
   {
     accessorKey: 'status',
     header: 'Status',
     cell: ({ row }) => {
-      const status = row.getValue('status') as string;
+      const status = row.getValue('status') as string
       return (
         <Badge variant={status === 'active' ? 'default' : 'secondary'}>
           {status}
         </Badge>
-      );
+      )
     },
   },
   {
@@ -106,15 +108,15 @@ export const createUserColumns = ({ onEdit, onDelete }: UserColumnsProps): Colum
       </Button>
     ),
     cell: ({ row }) => {
-      const date = new Date(row.getValue('createdAt'));
-      return <div>{date.toLocaleDateString()}</div>;
+      const date = new Date(row.getValue('createdAt'))
+      return <div>{date.toLocaleDateString()}</div>
     },
   },
   {
     id: 'actions',
     enableHiding: false,
     cell: ({ row }) => {
-      const user = row.original;
+      const user = row.original
 
       return (
         <DropdownMenu>
@@ -145,7 +147,7 @@ export const createUserColumns = ({ onEdit, onDelete }: UserColumnsProps): Colum
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      );
+      )
     },
   },
-];
+]

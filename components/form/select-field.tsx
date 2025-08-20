@@ -1,61 +1,69 @@
 'use client';
 
-import { Control, FieldPath, FieldValues } from 'react-hook-form';
+import { Control, FieldValues, Path } from 'react-hook-form'
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { FormField } from './form-field';
+} from '@/components/ui/select'
 
-interface SelectOption {
-  value: string;
-  label: string;
+type Option = {
+  label: string
+  value: string
 }
 
-interface SelectFieldProps<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
-> {
-  control: Control<TFieldValues>;
-  name: TName;
-  label?: string;
-  placeholder?: string;
-  options: SelectOption[];
-  description?: string;
-  required?: boolean;
-  className?: string;
+interface SelectFieldProps<T extends FieldValues> {
+  name: Path<T>
+  control: Control<T>
+  label: string
+  options: Option[]
+  placeholder?: string
+  helperText?: string
 }
 
-export function SelectField<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
->(props: SelectFieldProps<TFieldValues, TName>) {
-  return (
-    <FormField
-      control={props.control}
-      name={props.name}
-      label={props.label}
-      description={props.description}
-      required={props.required}
-      className={props.className}
-    >
-      {({ value, onChange }) => (
-        <Select value={value} onValueChange={onChange}>
-          <SelectTrigger>
-            <SelectValue placeholder={props.placeholder} />
-          </SelectTrigger>
+const SelectField = <T extends FieldValues>({
+  name,
+  control,
+  label,
+  options,
+  placeholder,
+  helperText,
+}: SelectFieldProps<T>) => (
+  <FormField
+    control={control}
+    name={name}
+    render={({ field }) => (
+      <FormItem>
+        <FormLabel>{label}</FormLabel>
+        <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <FormControl>
+            <SelectTrigger>
+              <SelectValue placeholder={placeholder} />
+            </SelectTrigger>
+          </FormControl>
           <SelectContent>
-            {props.options.map((option) => (
+            {options.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.label}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-      )}
-    </FormField>
-  );
-}
+        {helperText && <FormDescription>{helperText}</FormDescription>}
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+)
+
+export default SelectField

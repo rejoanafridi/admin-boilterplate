@@ -1,4 +1,23 @@
-export type FieldType = 'input' | 'textarea' | 'select' | 'asyncSelect' | 'password' | 'email';
+export type FieldType =
+  | 'input'
+  | 'textarea'
+  | 'select'
+  | 'asyncSelect'
+  | 'password'
+  | 'email'
+  | 'number'
+  | 'multi-select'
+  | 'checkbox'
+  | 'radio-group'
+  | 'switch'
+  | 'date'
+  | 'date-range'
+  | 'file-upload'
+  | 'rich-text'
+  | 'phone'
+  | 'otp'
+  | 'color'
+  | 'slider'
 
 export interface FieldDefinition {
   name: string;

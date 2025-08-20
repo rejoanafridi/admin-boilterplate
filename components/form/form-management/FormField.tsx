@@ -1,178 +1,73 @@
-import { FormField as BaseFormField } from '@/components/form/form-field'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { ReactElement, memo } from 'react'
-import { FieldDefinition, FieldType } from './types'
-import {
-  Control,
-  UseFormRegister,
-  FieldErrors,
-  Controller,
-} from 'react-hook-form'
+import { memo } from 'react'
+import { Control } from 'react-hook-form'
+
+import CheckboxField from '../checkbox-field'
+import DateField from '../date-field'
+import DateRangeField from '../date-range-field'
+import FileUploadField from '../file-upload-field'
+import InputField from '../input-field'
+import MultiSelectField from '../multi-select-field'
+import NumberField from '../number-field'
+import PasswordField from '../password-field'
+import RadioGroupField from '../radio-group-field'
+import SelectField from '../select-field'
+import SwitchField from '../switch-field'
+import TextareaField from '../textarea-field'
+
+import { FieldDefinition } from './types'
 
 interface FormFieldProps {
   field: FieldDefinition
-  register: UseFormRegister<any>
   control: Control<any>
-  errors: FieldErrors<any>
   isLoading?: boolean
   resetKey?: string | number
 }
 
-const FormField = ({
-  field,
-  register,
-  control,
-  errors,
-  isLoading,
-  resetKey,
-}: FormFieldProps) => {
+const FormField = ({ field, control, isLoading }: FormFieldProps) => {
   const commonProps = {
+    name: field.name,
+    control,
+    label: field.label,
     placeholder: field.placeholder,
+    helperText: field.description,
     disabled: field.disabled || isLoading,
   }
 
-  const renderInput = () => {
-    if (field.type === 'textarea') {
-      return <Textarea {...register(field.name)} {...commonProps} />
-    }
-
-    return (
-      <Input
-        {...register(field.name)}
-        {...commonProps}
-        type={
-          field.type === 'password'
-            ? 'password'
-            : field.type === 'email'
-            ? 'email'
-            : 'text'
-        }
-      />
-    )
+  const fieldComponents = {
+    input: <InputField {...commonProps} />,
+    textarea: <TextareaField {...commonProps} />,
+    select: <SelectField {...commonProps} options={field.options || []} />,
+    password: <PasswordField {...commonProps} />,
+    email: <InputField {...commonProps} type="email" />,
+    number: <NumberField {...commonProps} />,
+    'multi-select': (
+      <MultiSelectField {...commonProps} options={field.options || []} />
+    ),
+    checkbox: <CheckboxField {...commonProps} />,
+    'radio-group': (
+      <RadioGroupField {...commonProps} options={field.options || []} />
+    ),
+    switch: <SwitchField {...commonProps} />,
+    date: <DateField {...commonProps} />,
+    'date-range': <DateRangeField {...commonProps} />,
+    'file-upload': <FileUploadField {...commonProps} />,
+    // Fallbacks for unhandled types
+    asyncSelect: <SelectField {...commonProps} options={field.options || []} />,
   }
 
-  const renderSelect = () => {
-    if (!field.options && field.type === 'select') {
-      console.error('Select requires options prop')
-      return null
-    }
+  const component = fieldComponents[field.type as keyof typeof fieldComponents]
 
-    return (
-      <Controller
-        key={`${field.name}-${resetKey}`}
-        name={field.name}
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <Select value={value} onValueChange={onChange}>
-            <SelectTrigger {...commonProps}>
-              <SelectValue placeholder={field.placeholder} />
-            </SelectTrigger>
-            <SelectContent>
-              {field.options?.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
-      />
-    )
+  if (!component) {
+    console.error(`Unsupported field type: ${field.type}`)
+    return null
   }
 
-  const fieldComponents: Record<FieldType, () => ReactElement<any> | null> = {
-    input: renderInput,
-    textarea: renderInput,
-    select: renderSelect,
-    asyncSelect: renderSelect, // Fallback to regular select for now
-    password: renderInput,
-    email: renderInput,
+  // Conditional rendering based on field definition
+  if (field.condition && !field.condition(control._formValues)) {
+    return null
   }
 
-  const renderComponent = fieldComponents[field.type]
-
-  // Use the current form-field.tsx pattern
-  return (
-    <BaseFormField
-      control={control}
-      name={field.name}
-      label={field.label}
-      description={field.description}
-      required={field.required}
-      className={field.className}
-    >
-      {({ value, onChange, onBlur }) => {
-        if (field.type === 'select' || field.type === 'asyncSelect') {
-          // For select fields, we need to use Controller
-          return (
-            <Controller
-              key={`${field.name}-${resetKey}`}
-              name={field.name}
-              control={control}
-              render={({
-                field: { onChange: controllerOnChange, value: controllerValue },
-              }) => (
-                <Select
-                  value={controllerValue}
-                  onValueChange={controllerOnChange}
-                >
-                  <SelectTrigger {...commonProps}>
-                    <SelectValue placeholder={field.placeholder} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {field.options?.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-          )
-        }
-
-        // For input fields, use the register pattern
-        if (field.type === 'textarea') {
-          return (
-            <Textarea
-              {...register(field.name)}
-              {...commonProps}
-              value={value || ''}
-              onChange={(e) => onChange(e.target.value)}
-              onBlur={onBlur}
-            />
-          )
-        }
-
-        return (
-          <Input
-            {...register(field.name)}
-            {...commonProps}
-            type={
-              field.type === 'password'
-                ? 'password'
-                : field.type === 'email'
-                ? 'email'
-                : 'text'
-            }
-            value={value || ''}
-            onChange={(e) => onChange(e.target.value)}
-            onBlur={onBlur}
-          />
-        )
-      }}
-    </BaseFormField>
-  )
+  return <div className={field.className}>{component}</div>
 }
 
-// Memoize the component to prevent unnecessary re-renders
 export default memo(FormField)

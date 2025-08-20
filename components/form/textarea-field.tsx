@@ -1,31 +1,28 @@
-'use client'
-
-import { Control, FieldValues, Path } from 'react-hook-form'
-
+import { Controller, Control, FieldValues, Path } from 'react-hook-form'
 import {
-  FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
+  FormDescription,
   FormMessage,
 } from '@/components/ui/form'
-import { Input, InputProps } from '@/components/ui/input'
+import { Textarea, TextareaProps } from '@/components/ui/textarea'
 
-interface InputFieldProps<T extends FieldValues> extends InputProps {
+interface TextareaFieldProps<T extends FieldValues> extends TextareaProps {
   name: Path<T>
   control: Control<T>
   label: string
   helperText?: string
 }
 
-const InputField = <T extends FieldValues>({
+const TextareaField = <T extends FieldValues>({
   name,
   control,
   label,
   helperText,
   ...props
-}: InputFieldProps<T>) => (
+}: TextareaFieldProps<T>) => (
   <FormField
     control={control}
     name={name}
@@ -33,7 +30,7 @@ const InputField = <T extends FieldValues>({
       <FormItem>
         <FormLabel>{label}</FormLabel>
         <FormControl>
-          <Input {...field} {...props} />
+          <Textarea {...field} {...props} />
         </FormControl>
         {helperText && <FormDescription>{helperText}</FormDescription>}
         <FormMessage />
@@ -42,4 +39,4 @@ const InputField = <T extends FieldValues>({
   />
 )
 
-export default InputField
+export default TextareaField
