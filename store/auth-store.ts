@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+
 import { setAuthToken, removeAuthToken } from '@/lib/cookies'
 
 export interface User {

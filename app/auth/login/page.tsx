@@ -1,14 +1,15 @@
 'use client'
 
-import { useState } from 'react'
-import { z } from 'zod'
-import { useAuth } from '@/contexts/auth-context'
-import { useToast } from '@/hooks/use-toast'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { z } from 'zod'
+
 import BaseFormComponent from '@/components/form/form-management/BaseFormComponent'
 import { FieldDefinition } from '@/components/form/form-management/types'
 import { Card } from '@/components/ui/card'
+import { useAuth } from '@/contexts/auth-context'
+import { useToast } from '@/hooks/use-toast'
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -100,7 +101,10 @@ export default function LoginPage() {
         />
 
         <div className="mt-6 text-center text-sm">
-          <span className="text-muted-foreground">Don't have an account? </span>
+          <span className="text-muted-foreground">
+            {' '}
+            Don&apos;t have an account?{' '}
+          </span>
           <Link
             href="/auth/register"
             className="font-medium text-primary hover:underline"

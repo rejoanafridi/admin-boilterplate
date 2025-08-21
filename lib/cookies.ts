@@ -1,7 +1,8 @@
 'use client'
 
-import { token as AUTH_TOKEN_KEY } from './Constants'
 import Cookies from 'js-cookie'
+
+import { token as AUTH_TOKEN_KEY } from './Constants'
 
 /**
  * Cookie utility functions for authentication

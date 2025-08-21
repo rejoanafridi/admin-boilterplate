@@ -1,7 +1,9 @@
-import axios from 'axios';
-import { useAuthStore } from '@/store/auth-store';
+import axios from 'axios'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+import { useAuthStore } from '@/store/auth-store'
+
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
 
 // Create axios instance
 export const api = axios.create({
@@ -10,21 +12,21 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-});
+})
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const { token } = useAuthStore.getState();
+    const { token } = useAuthStore.getState()
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`
     }
-    return config;
+    return config
   },
   (error) => {
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
-);
+)
 
 // Response interceptor for error handling
 api.interceptors.response.use(
@@ -32,16 +34,17 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Token expired or invalid - logout user
-      useAuthStore.getState().logout();
-      window.location.href = '/auth/login';
+      useAuthStore.getState().logout()
+      window.location.href = '/auth/login'
     }
-    
+
     return Promise.reject({
-      message: error.response?.data?.message || error.message || 'An error occurred',
+      message:
+        error.response?.data?.message || error.message || 'An error occurred',
       status: error.response?.status,
       data: error.response?.data,
-    });
+    })
   }
-);
+)
 
-export default api;
+export default api

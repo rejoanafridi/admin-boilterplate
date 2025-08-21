@@ -11,72 +11,74 @@ export function useLanguageSwitcher() {
   const currentLocale = useLocale() as Locale
 
   const switchLanguage = (locale: string) => {
-    console.log('Switching to locale:', locale, 'from:', currentLocale)
-
     // Check if the locale is valid
     if (!locales.includes(locale as any)) return
 
     // Don't switch if already on this locale
     if (locale === currentLocale) return
 
-    // Get the path without any locale prefix
+    // Extract the path without any locale prefix
     let pathWithoutLocale = pathname
 
-    // Check if the current path has a locale prefix
-    for (const loc of locales) {
-      // Handle both /fr/ and /fr (exact match)
-      if (pathname.startsWith(`/${loc}/`)) {
-        pathWithoutLocale = pathname.replace(`/${loc}`, '')
-        break
-      } else if (pathname === `/${loc}`) {
-        pathWithoutLocale = '/'
-        break
-      }
+    // Remove locale prefix if present
+    const currentPathSegments = pathname.split('/').filter(Boolean)
+    if (
+      currentPathSegments.length > 0 &&
+      locales.includes(currentPathSegments[0] as Locale)
+    ) {
+      // Remove the first segment (locale) and reconstruct path
+      pathWithoutLocale = '/' + currentPathSegments.slice(1).join('/')
     }
 
-    // Make sure path starts with / for consistency
+    // Ensure path starts with /
     if (!pathWithoutLocale.startsWith('/')) {
       pathWithoutLocale = '/' + pathWithoutLocale
     }
 
-    // Construct the new path with or without locale prefix
-    let newPath
-    if (locale === 'en') {
-      newPath = pathWithoutLocale
-    } else {
-      newPath = `/${locale}${pathWithoutLocale === '/' ? '' : pathWithoutLocale}`
+    // If path is just "/", keep it as is
+    if (pathWithoutLocale === '/') {
+      pathWithoutLocale = '/'
     }
 
-    console.log('Navigating to:', newPath)
+    // Construct the new path
+    const newPath =
+      pathWithoutLocale === '/'
+        ? `/${locale}`
+        : `/${locale}${pathWithoutLocale}`
+
+    // Navigate to the new path
     router.push(newPath)
-    router.refresh()
   }
 
   const getLocalizedPath = (path: string) => {
-    // Handle exact locale matches (like "/fr")
-    for (const loc of locales) {
-      if (path === `/${loc}`) {
-        return currentLocale === 'en' ? '/' : `/${currentLocale}`
-      }
+    // Extract the path without any locale prefix
+    let pathWithoutLocale = path
+
+    // Remove locale prefix if present
+    const pathSegments = path.split('/').filter(Boolean)
+    if (
+      pathSegments.length > 0 &&
+      locales.includes(pathSegments[0] as Locale)
+    ) {
+      // Remove the first segment (locale) and reconstruct path
+      pathWithoutLocale = '/' + pathSegments.slice(1).join('/')
     }
 
-    // Handle paths with locale prefixes (like "/fr/dashboard")
-    for (const loc of locales) {
-      if (path.startsWith(`/${loc}/`)) {
-        // Replace the locale prefix with current locale (or none for English)
-        const pathWithoutLocale = path.replace(`/${loc}`, '')
-        return currentLocale === 'en'
-          ? pathWithoutLocale
-          : `/${currentLocale}${pathWithoutLocale}`
-      }
+    // Ensure path starts with /
+    if (!pathWithoutLocale.startsWith('/')) {
+      pathWithoutLocale = '/' + pathWithoutLocale
     }
 
-    // If no locale in path, add the current locale prefix (except for English)
-    // Make sure path starts with /
-    const normalizedPath = path.startsWith('/') ? path : `/${path}`
-    return currentLocale === 'en'
-      ? normalizedPath
-      : `/${currentLocale}${normalizedPath}`
+    // Construct the localized path
+    if (currentLocale === 'en') {
+      // For English, use the path without locale prefix
+      return pathWithoutLocale === '/' ? '/' : pathWithoutLocale
+    } else {
+      // For other languages, add the locale prefix
+      return pathWithoutLocale === '/'
+        ? `/${currentLocale}`
+        : `/${currentLocale}${pathWithoutLocale}`
+    }
   }
 
   return {

@@ -1,9 +1,10 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { ThemeProvider } from '@/contexts/theme-context'
-import { AuthProvider } from '@/contexts/auth-context'
+
 import { RouteMetadataProvider } from '@/components/route-metadata-provider'
+import { AuthProvider } from '@/contexts/auth-context'
+import { ThemeProvider } from '@/contexts/theme-context'
 
 interface AppProvidersProps {
   children: ReactNode

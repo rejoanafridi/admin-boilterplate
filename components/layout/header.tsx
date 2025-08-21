@@ -55,9 +55,7 @@ export function Header() {
                 className={locale === currentLocale ? 'bg-accent' : ''}
                 onClick={() => {
                   console.log(locale, '--->')
-                  if (locale === 'en') {
-                    switchLanguage('')
-                  }
+
                   switchLanguage(locale)
                 }}
               >
