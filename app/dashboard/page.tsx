@@ -1,8 +1,9 @@
-'use client';
+'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
-import { Users, Settings, Activity, TrendingUp } from 'lucide-react';
+import { Users, Settings, Activity, TrendingUp } from 'lucide-react'
+
+import { DashboardLayout } from '@/components/layout/dashboard-layout'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const stats = [
   {
@@ -29,7 +30,7 @@ const stats = [
     change: 'All systems operational',
     icon: Settings,
   },
-];
+]
 
 export default function DashboardPage() {
   return (
@@ -38,7 +39,7 @@ export default function DashboardPage() {
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           <p className="text-muted-foreground">
-            Here's what's happening with your admin panel today.
+            Here&apos;s what&apos;s happening with your admin panel today.
           </p>
         </div>
 
@@ -53,9 +54,7 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground">
-                  {stat.change}
-                </p>
+                <p className="text-xs text-muted-foreground">{stat.change}</p>
               </CardContent>
             </Card>
           ))}
@@ -98,20 +97,26 @@ export default function DashboardPage() {
             <CardContent className="space-y-2">
               <button className="w-full text-left p-3 rounded-lg hover:bg-accent transition-colors">
                 <p className="font-medium">Add New User</p>
-                <p className="text-sm text-muted-foreground">Create a new user account</p>
+                <p className="text-sm text-muted-foreground">
+                  Create a new user account
+                </p>
               </button>
               <button className="w-full text-left p-3 rounded-lg hover:bg-accent transition-colors">
                 <p className="font-medium">System Settings</p>
-                <p className="text-sm text-muted-foreground">Configure system parameters</p>
+                <p className="text-sm text-muted-foreground">
+                  Configure system parameters
+                </p>
               </button>
               <button className="w-full text-left p-3 rounded-lg hover:bg-accent transition-colors">
                 <p className="font-medium">View Reports</p>
-                <p className="text-sm text-muted-foreground">Generate analytics reports</p>
+                <p className="text-sm text-muted-foreground">
+                  Generate analytics reports
+                </p>
               </button>
             </CardContent>
           </Card>
         </div>
       </div>
     </DashboardLayout>
-  );
+  )
 }

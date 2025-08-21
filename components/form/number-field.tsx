@@ -1,6 +1,8 @@
 'use client'
 
+import { Minus, Plus } from 'lucide-react'
 import { Control, FieldValues, Path, useController } from 'react-hook-form'
+
 import { Button } from '@/components/ui/button'
 import {
   FormControl,
@@ -11,7 +13,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input, InputProps } from '@/components/ui/input'
-import { Minus, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface NumberFieldProps<T extends FieldValues>

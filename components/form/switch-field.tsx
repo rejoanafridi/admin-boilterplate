@@ -1,4 +1,5 @@
 import { Control, FieldValues, Path } from 'react-hook-form'
+
 import {
   FormControl,
   FormDescription,
@@ -29,9 +30,7 @@ const SwitchField = <T extends FieldValues>({
       <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
         <div className="space-y-0.5">
           <FormLabel className="text-base">{label}</FormLabel>
-          {helperText && (
-            <FormDescription>{helperText}</FormDescription>
-          )}
+          {helperText && <FormDescription>{helperText}</FormDescription>}
         </div>
         <FormControl>
           <Switch

@@ -1,6 +1,11 @@
 'use client'
 
+import { format } from 'date-fns'
+import { CalendarIcon } from 'lucide-react'
 import { Control, FieldValues, Path } from 'react-hook-form'
+
+import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
 import {
   FormControl,
   FormDescription,
@@ -14,10 +19,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
-import { CalendarIcon } from 'lucide-react'
-import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
 
 interface DateFieldProps<T extends FieldValues> {

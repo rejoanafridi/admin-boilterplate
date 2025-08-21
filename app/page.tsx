@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+
 import { useAuth } from '@/contexts/auth-context'
 import { defaultLocale } from '@/lib/i18n-config'
 

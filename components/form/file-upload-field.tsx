@@ -1,6 +1,10 @@
 'use client'
 
+import { UploadCloud, X } from 'lucide-react'
+import { useCallback, useState } from 'react'
+import { useDropzone } from 'react-dropzone'
 import { Control, FieldValues, Path, useController } from 'react-hook-form'
+
 import {
   FormControl,
   FormDescription,
@@ -10,9 +14,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
-import { UploadCloud, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface FileUploadFieldProps<T extends FieldValues> {
@@ -42,7 +43,9 @@ const FileUploadField = <T extends FieldValues>({
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      const newFiles = multiple ? [...(value || []), ...acceptedFiles] : acceptedFiles
+      const newFiles = multiple
+        ? [...(value || []), ...acceptedFiles]
+        : acceptedFiles
       onChange(newFiles)
 
       const newPreviews = newFiles.map((file) => URL.createObjectURL(file))

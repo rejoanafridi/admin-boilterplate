@@ -1,16 +1,34 @@
-'use client';
+'use client'
 
-import { Sidebar } from './sidebar';
-import { Header } from './header';
-import { useAppStore } from '@/store/app-store';
-import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react'
+
+import { Header } from './header'
+import { Sidebar } from './sidebar'
 
 interface DashboardLayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { sidebarOpen } = useAppStore();
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  // Prevent hydration issues during SSR
+  if (!isMounted) {
+    return (
+      <div className="flex h-screen bg-background">
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <div className="h-16 border-b bg-background"></div>
+          <main className="flex-1 overflow-x-hidden overflow-y-auto p-6">
+            {children}
+          </main>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-screen bg-background">
@@ -22,5 +40,5 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </main>
       </div>
     </div>
-  );
+  )
 }

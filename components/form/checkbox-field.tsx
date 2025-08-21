@@ -1,6 +1,8 @@
-'use client';
+'use client'
 
 import { Control, FieldValues, Path } from 'react-hook-form'
+
+import { Checkbox, CheckboxProps } from '@/components/ui/checkbox'
 import {
   FormControl,
   FormDescription,
@@ -8,7 +10,6 @@ import {
   FormItem,
   FormLabel,
 } from '@/components/ui/form'
-import { Checkbox, CheckboxProps } from '@/components/ui/checkbox'
 
 interface CheckboxFieldProps<T extends FieldValues> extends CheckboxProps {
   name: Path<T>
@@ -38,9 +39,7 @@ const CheckboxField = <T extends FieldValues>({
         </FormControl>
         <div className="space-y-1 leading-none">
           <FormLabel>{label}</FormLabel>
-          {helperText && (
-            <FormDescription>{helperText}</FormDescription>
-          )}
+          {helperText && <FormDescription>{helperText}</FormDescription>}
         </div>
       </FormItem>
     )}

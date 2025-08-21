@@ -1,13 +1,14 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 import { z } from 'zod'
-import { useAuth } from '@/contexts/auth-context'
-import { useToast } from '@/hooks/use-toast'
-import Link from 'next/link'
+
 import BaseFormComponent from '@/components/form/form-management/BaseFormComponent'
 import { FieldDefinition } from '@/components/form/form-management/types'
 import { Card } from '@/components/ui/card'
+import { useAuth } from '@/contexts/auth-context'
+import { useToast } from '@/hooks/use-toast'
 
 const registerSchema = z
   .object({

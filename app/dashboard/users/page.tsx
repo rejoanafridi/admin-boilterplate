@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { DataTable } from '@/components/data-table/data-table'
 import { DashboardLayout } from '@/components/layout/dashboard-layout'
@@ -17,7 +17,6 @@ import { createUserColumns } from '@/features/users/components/user-columns'
 import { UserForm } from '@/features/users/components/user-form'
 import { useToast } from '@/hooks/use-toast'
 import {
-  userService,
   User,
   CreateUserRequest,
   UpdateUserRequest,
@@ -55,9 +54,14 @@ const mockUsers: User[] = [
 ]
 
 export default function UsersPage() {
+  const [isMounted, setIsMounted] = useState(false)
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [editingUser, setEditingUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const queryClient = useQueryClient()
   const { toast } = useToast()
@@ -152,6 +156,17 @@ export default function UsersPage() {
     onEdit: handleEdit,
     onDelete: handleDelete,
   })
+
+  // Prevent hydration issues by not rendering until mounted
+  if (!isMounted) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-lg">Loading...</div>
+        </div>
+      </DashboardLayout>
+    )
+  }
 
   if (isLoading) {
     return (

@@ -1,8 +1,10 @@
 'use client'
 
+import { Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react'
 import { Control, FieldValues, Path } from 'react-hook-form'
-import { Eye, EyeOff } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
 import {
   FormControl,
   FormDescription,
@@ -12,7 +14,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input, InputProps } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 interface PasswordFieldProps<T extends FieldValues> extends InputProps {
