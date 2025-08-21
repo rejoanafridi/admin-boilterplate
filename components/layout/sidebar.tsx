@@ -1,6 +1,14 @@
 'use client'
 
-import { LayoutDashboard, Users, Settings, LogOut, Menu, X } from 'lucide-react'
+import {
+  LayoutDashboard,
+  Users,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+  FileText,
+} from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
@@ -22,6 +30,11 @@ const getNavigationItems = (t: (key: string) => string) => [
     title: t('users'),
     href: '/dashboard/users',
     icon: Users,
+  },
+  {
+    title: 'Form Examples',
+    href: '/forms-example',
+    icon: FileText,
   },
   {
     title: t('settings'),
