@@ -1,4 +1,5 @@
 import { Control, FieldValues, Path } from 'react-hook-form'
+
 import {
   FormControl,
   FormDescription,
@@ -7,7 +8,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { RadioGroup, RadioGroupProps } from '@/components/ui/radio-group'
+import {
+  RadioGroup,
+  RadioGroupItem,
+  RadioGroupProps,
+} from '@/components/ui/radio-group'
 
 type Option = {
   label: string
@@ -49,9 +54,18 @@ const RadioGroupField = <T extends FieldValues>({
                 className="flex items-center space-x-3 space-y-0"
               >
                 <FormControl>
-                  <RadioGroup.Item value={option.value} />
+                  {/* Use the correct RadioGroup primitive for each option */}
+                  <RadioGroupItem
+                    value={option.value}
+                    id={`${name}-${option.value}`}
+                  />
                 </FormControl>
-                <FormLabel className="font-normal">{option.label}</FormLabel>
+                <FormLabel
+                  className="font-normal"
+                  htmlFor={`${name}-${option.value}`}
+                >
+                  {option.label}
+                </FormLabel>
               </FormItem>
             ))}
           </RadioGroup>

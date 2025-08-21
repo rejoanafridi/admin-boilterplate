@@ -85,8 +85,10 @@ export function UserForm({
   ]
 
   const handleFormSubmit = (data: UserFormData) => {
-    const submitData = { ...data }
-    if (isEdit && !submitData.password) {
+    // Remove password from submitData only if it exists, to avoid TS error
+    const submitData = { ...data } as Partial<CreateUserRequest> &
+      Partial<UpdateUserRequest>
+    if (isEdit && 'password' in submitData && !submitData.password) {
       delete submitData.password
     }
     onSubmit(submitData as CreateUserRequest | UpdateUserRequest)

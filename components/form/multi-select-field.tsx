@@ -1,6 +1,9 @@
 'use client'
 
+import { X } from 'lucide-react'
 import { Control, FieldValues, Path, useController } from 'react-hook-form'
+
+import { Badge } from '@/components/ui/badge'
 import {
   FormControl,
   FormDescription,
@@ -16,9 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { X } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 type Option = {
   label: string
@@ -51,14 +51,17 @@ const MultiSelectField = <T extends FieldValues>({
     control,
   })
 
+  // Ensure value is typed as string array
+  const currentValue: string[] = Array.isArray(value) ? value : []
+
   const handleSelect = (selectedValue: string) => {
-    if (!value.includes(selectedValue)) {
-      onChange([...value, selectedValue])
+    if (!currentValue.includes(selectedValue)) {
+      onChange([...currentValue, selectedValue])
     }
   }
 
   const handleRemove = (selectedValue: string) => {
-    onChange(value.filter((val: string) => val !== selectedValue))
+    onChange(currentValue.filter((val: string) => val !== selectedValue))
   }
 
   return (
@@ -79,7 +82,7 @@ const MultiSelectField = <T extends FieldValues>({
                 <SelectItem
                   key={option.value}
                   value={option.value}
-                  disabled={value.includes(option.value)}
+                  disabled={currentValue.includes(option.value)}
                 >
                   {option.label}
                 </SelectItem>
@@ -87,7 +90,7 @@ const MultiSelectField = <T extends FieldValues>({
             </SelectContent>
           </Select>
           <div className="flex flex-wrap gap-2 pt-2">
-            {value.map((val: string) => {
+            {currentValue.map((val: string) => {
               const option = options.find((opt) => opt.value === val)
               return (
                 <Badge key={val} variant="secondary">
