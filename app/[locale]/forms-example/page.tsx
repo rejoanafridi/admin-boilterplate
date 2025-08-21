@@ -463,7 +463,7 @@ export default function FormsExamplePage() {
                     password: true,
                   })}
                   fields={basicFields}
-                  onSubmit={handleSubmit}
+                  onSubmit={(data) => handleSubmit(data as FormData)}
                   isLoading={isSubmitting}
                   actionButtons={{
                     submit: true,
@@ -492,7 +492,7 @@ export default function FormsExamplePage() {
                     comments: true,
                   })}
                   fields={numbersAndTextFields}
-                  onSubmit={handleSubmit}
+                  onSubmit={(data) => handleSubmit(data as FormData)}
                   isLoading={isSubmitting}
                   actionButtons={{
                     submit: true,
@@ -520,7 +520,7 @@ export default function FormsExamplePage() {
                     experience: true,
                   })}
                   fields={selectionFields}
-                  onSubmit={handleSubmit}
+                  onSubmit={(data) => handleSubmit(data as FormData)}
                   isLoading={isSubmitting}
                   actionButtons={{
                     submit: true,
@@ -548,7 +548,7 @@ export default function FormsExamplePage() {
                     terms: true,
                   })}
                   fields={booleanFields}
-                  onSubmit={handleSubmit}
+                  onSubmit={(data) => handleSubmit(data as FormData)}
                   isLoading={isSubmitting}
                   actionButtons={{
                     submit: true,
