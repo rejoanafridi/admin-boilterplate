@@ -22,6 +22,7 @@ interface FileUploadFieldProps<T extends FieldValues> {
   label: string
   helperText?: string
   multiple?: boolean
+  accept?: string
 }
 
 const FileUploadField = <T extends FieldValues>({
@@ -30,6 +31,7 @@ const FileUploadField = <T extends FieldValues>({
   label,
   helperText,
   multiple = false,
+  accept,
 }: FileUploadFieldProps<T>) => {
   const {
     field: { onChange, value },
@@ -68,6 +70,7 @@ const FileUploadField = <T extends FieldValues>({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple,
+    accept: accept ? { [accept]: [] } : undefined,
   })
 
   return (

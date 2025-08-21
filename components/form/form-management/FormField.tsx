@@ -35,11 +35,18 @@ const FormField = ({ field, control, isLoading }: FormFieldProps) => {
 
   const fieldComponents = {
     input: <InputField {...commonProps} />,
-    textarea: <TextareaField {...commonProps} />,
+    textarea: <TextareaField {...commonProps} rows={field.rows} />,
     select: <SelectField {...commonProps} options={field.options || []} />,
     password: <PasswordField {...commonProps} />,
     email: <InputField {...commonProps} type="email" />,
-    number: <NumberField {...commonProps} />,
+    number: (
+      <NumberField
+        {...commonProps}
+        min={field.min}
+        max={field.max}
+        step={field.step}
+      />
+    ),
     'multi-select': (
       <MultiSelectField {...commonProps} options={field.options || []} />
     ),
@@ -50,7 +57,13 @@ const FormField = ({ field, control, isLoading }: FormFieldProps) => {
     switch: <SwitchField {...commonProps} />,
     date: <DateField {...commonProps} />,
     'date-range': <DateRangeField {...commonProps} />,
-    'file-upload': <FileUploadField {...commonProps} />,
+    'file-upload': (
+      <FileUploadField
+        {...commonProps}
+        accept={field.accept}
+        multiple={field.multiple}
+      />
+    ),
     // Fallbacks for unhandled types
     asyncSelect: <SelectField {...commonProps} options={field.options || []} />,
   }

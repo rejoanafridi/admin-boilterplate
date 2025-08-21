@@ -22,6 +22,9 @@ interface NumberFieldProps<T extends FieldValues>
   label: string
   helperText?: string
   stepper?: boolean
+  min?: number
+  max?: number
+  step?: number
 }
 
 const NumberField = <T extends FieldValues>({
@@ -31,6 +34,9 @@ const NumberField = <T extends FieldValues>({
   helperText,
   stepper = true,
   className,
+  min,
+  max,
+  step,
   ...props
 }: NumberFieldProps<T>) => {
   const {
@@ -64,6 +70,9 @@ const NumberField = <T extends FieldValues>({
                 type="number"
                 {...field}
                 {...props}
+                min={min}
+                max={max}
+                step={step}
                 onChange={handleChange}
                 className={cn({ 'pr-16': stepper }, className)}
               />

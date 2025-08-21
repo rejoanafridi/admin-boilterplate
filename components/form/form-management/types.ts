@@ -28,6 +28,19 @@ export interface FieldDefinition {
   className?: string
   required?: boolean
   description?: string
+
+  // Number field specific props
+  min?: number
+  max?: number
+  step?: number
+
+  // Textarea specific props
+  rows?: number
+
+  // File upload specific props
+  accept?: string
+  multiple?: boolean
+
   // AsyncSelect specific props
   apiUrl?: string
   queryKey?: string
@@ -35,8 +48,10 @@ export interface FieldDefinition {
   optValueKey?: string
   isMulti?: boolean
   isClearable?: boolean
+
   // Select specific props
   options?: Array<{ label: string; value: string }>
+
   // Conditional rendering
   condition?: (values: any) => boolean
 }
